@@ -1,1 +1,1 @@
-# anischedule-macOS
+# AniAtlas-macOS
