@@ -7,44 +7,43 @@ It integrates with AniList to sync your anime list and uses an AI assistant call
 
 ## Features
 
-Anime Tracking
+### Anime Tracking
 	•	Sync your anime lists directly from AniList
 	•	Track Watching / Completed / Planning
 	•	View upcoming episodes in a calendar schedule
 
-Airing Schedule
+### Airing Schedule
 	•	See when the next episode airs
 	•	View a weekly or monthly anime calendar
 	•	Countdown to upcoming episodes
 
-Smart Anime Assistant — Hikari
+### Smart Anime Assistant — Hikari
 	•	Ask for anime recommendations
 	•	Get suggestions based on your watch history
 	•	Discover anime similar to your favourites
 
-Continue Watching
+### Continue Watching
 
 Quickly resume anime you haven’t finished yet.
 
-Notifications
+### Notifications
 
 Get desktop notifications when new episodes release.
 
-Menu Bar Integration (macOS)
+### Menu Bar Integration (macOS)
 	•	View upcoming episodes
 	•	Check today’s releases
 	•	Mark episodes as watched
 
-Calendar Export
+### Calendar Export
 
 Export anime schedules to your calendar.
 
-
-Screenshots
+### Screenshots
 
 (Images later)
 
-Roadmap
+### Roadmap
 
 Planned features:
 	•	Anime recommendation engine
@@ -54,7 +53,7 @@ Planned features:
 	•	Mobile version
 
 
-Hikari AI Assistant
+## Hikari AI Assistant
 
 Hikari is your personal anime guide.
 
@@ -66,10 +65,10 @@ She can:
 Users can also choose different Hikari avatars in settings.
 
 
-Acknowledgements
+### Acknowledgements
 	•	AniList API
 	•	MyAnimeList API
-  •	AnimeSchedule.net API
+	•	AnimeSchedule.net API
 
 
 
