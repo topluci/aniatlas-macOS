@@ -1,11 +1,11 @@
 # AniAtlas-macOS
 
-AniAtlas is a modern anime tracking app that helps you track airing episodes, manage your watchlist, and discover new anime — all in one clean interface.
+### AniAtlas is a modern anime tracking app that helps you track airing episodes, manage your watchlist, and discover new anime — all in one clean interface.
 
 It integrates with AniList to sync your anime list and uses an AI assistant called Hikari to recommend anime based on your tastes.
 
 
-Features
+## Features
 
 Anime Tracking
 	•	Sync your anime lists directly from AniList
@@ -39,7 +39,6 @@ Calendar Export
 
 Export anime schedules to your calendar.
 
-⸻
 
 Screenshots
 
