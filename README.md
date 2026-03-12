@@ -6,7 +6,7 @@ A native macOS desktop app for AniSchedule: Your anime schedule tracker with Ani
 
 ## Prerequisites
 
-Install these once on your Mac (all free):
+Install these once on your Mac:
 
 | Tool | Download |
 |------|----------|
