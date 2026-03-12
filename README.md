@@ -1,6 +1,6 @@
-# AniSchedule — macOS DMG Build
+# AniSchedule — macOS
 
-A native macOS desktop app for AniSchedule: your anime schedule tracker with AniList integration.
+A native macOS desktop app for AniSchedule: Your anime schedule tracker with AniList integration.
 
 ---
 
