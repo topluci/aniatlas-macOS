@@ -79,12 +79,7 @@ export function Dashboard() {
     }
   };
 
-  const watching = useMemo(() => animeList.filter((a) => a.status === 'CURRENT'), [animeList]);
-  const completed = useMemo(() => animeList.filter((a) => a.status === 'COMPLETED'), [animeList]);
-  const planning = useMemo(() => animeList.filter((a) => a.status === 'PLANNING'), [animeList]);
-  const filterOptions = useMemo(() => extractFilterOptions(animeList), [animeList]);
-
-  // Apply seasonal filter to the list shown in tabs
+  // Apply seasonal filter first
   const seasonFiltered = useMemo(() => {
     if (seasonFilter === 'all') return animeList;
     if (seasonFilter === 'current') {
@@ -94,6 +89,11 @@ export function Dashboard() {
     }
     return animeList.filter(a => a.season === seasonFilter);
   }, [animeList, seasonFilter, current]);
+
+  const watching = useMemo(() => seasonFiltered.filter((a) => a.status === 'CURRENT' || a.status === 'REPEATING'), [seasonFiltered]);
+  const completed = useMemo(() => animeList.filter((a) => a.status === 'COMPLETED'), [animeList]);
+  const planning = useMemo(() => animeList.filter((a) => a.status === 'PLANNING'), [animeList]);
+  const filterOptions = useMemo(() => extractFilterOptions(animeList), [animeList]);
 
   const filteredWatching = useMemo(
     () => filterAndSortAnime(watching, filters),
@@ -171,7 +171,7 @@ export function Dashboard() {
 
             {/* Seasonal filter pills — shown on non-schedule tabs */}
             {activeTab !== 'schedule' && (
-              <div className="flex items-center gap-1.5 flex-wrap">
+              <div className="flex items-center gap-1.5 flex-wrap mt-2 pt-2 border-t border-border/30">
                 <span className="text-xs text-muted-foreground mr-1">Season:</span>
                 <SeasonPill label="All" active={seasonFilter === 'all'} onClick={() => setSeasonFilter('all')} />
                 <SeasonPill

@@ -106,7 +106,7 @@ function UpdatesModal({ open, onClose }) {
     setStatus('checking');
     try {
       const releases = await window.electronAPI?.fetchChangelog();
-      const stable = (releases || []).filter(r => !r.prerelease);
+      const stable = releases || [];
       if (!stable.length) { setStatus('uptodate'); return; }
       const latest = stable[0];
       const current = await window.electronAPI?.getAppVersion?.() || '1.0.0';
@@ -225,7 +225,7 @@ function App() {
       setTimeout(async () => {
         try {
           const releases = await window.electronAPI.fetchChangelog?.();
-          const stable = (releases || []).filter(r => !r.prerelease);
+          const stable = releases || [];
           if (!stable.length) return;
           const current = await window.electronAPI.getAppVersion?.() || '1.0.0';
           const latest = stable[0];

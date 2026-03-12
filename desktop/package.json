@@ -1,6 +1,6 @@
 {
   "name": "aniatlas",
-  "version": "1.0.0",
+  "version": "0.6.0-alpha",
   "description": "AniAtlas – Anime tracking desktop app",
   "author": "topluci",
   "main": "main.js",
@@ -20,7 +20,7 @@
     "publish": {
       "provider": "github",
       "owner": "topluci",
-      "repo": "aniatlas-macOS",
+      "repo": "anischedule-macOS",
       "private": false
     },
     "mac": {

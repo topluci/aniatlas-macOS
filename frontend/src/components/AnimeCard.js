@@ -5,7 +5,7 @@ import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { ScrollArea } from './ui/scroll-area';
-import { CountdownTimer } from './CountdownTimer';
+import { CompactCountdown } from './CountdownTimer';
 import { EditAnimeModal } from './EditAnimeModal';
 import {
   HoverCard,
@@ -222,10 +222,7 @@ export function AnimeCard({ anime, showCountdown = true, onUpdate }) {
                   <div className="flex items-center gap-2 text-white/90">
                     <Clock className="w-3 h-3" />
                     <span className="text-xs">Ep {localAnime.nextAiringEpisode.episode}</span>
-                    <CountdownTimer
-                      airingAt={localAnime.nextAiringEpisode.airingAt}
-                      className="text-xs"
-                    />
+                    <CompactCountdown airingAt={localAnime.nextAiringEpisode.airingAt} />
                   </div>
                 )}
               </div>

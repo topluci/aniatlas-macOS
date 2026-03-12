@@ -22,7 +22,7 @@ export function ChatButton() {
       {!open && (
         <button
           onClick={() => { setOpen(true); setPulse(false); }}
-          className="fixed bottom-6 right-6 z-50 rounded-full shadow-lg flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 transition-all duration-200"
+          className="fixed bottom-6 right-6 z-50 rounded-full shadow-lg flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 transition-all duration-200 overflow-hidden p-0"
           style={{ width: 52, height: 52 }}
           title="Chat with Hikari"
           aria-label="Open AI chat"
@@ -43,7 +43,7 @@ function HikariAvatar({ size = 52 }) {
     <img
       src={`./hikari/hikari_${key}.png`}
       alt="Hikari"
-      style={{ width: size, height: size }}
+      style={{ width: size, height: size, display: 'block', margin: 0, objectPosition: 'center center' }}
       className="rounded-full object-cover"
       onError={e => { e.currentTarget.style.display = 'none'; }}
     />

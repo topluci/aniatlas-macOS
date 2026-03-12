@@ -60,7 +60,7 @@ export function Navbar({ animeList = [], schedules = [] }) {
       {/* macOS traffic light spacer — pushes content below the window control buttons */}
       {isElectronMac && <div style={{ height: 28, WebkitAppRegion: 'drag' }} />}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         {/* On macOS Electron, shift content right so it clears traffic lights */}
         <div className={`flex justify-between items-center h-13 ${isElectronMac ? 'pl-20' : ''}`}>
 

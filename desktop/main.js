@@ -6,6 +6,7 @@ const { app, BrowserWindow, ipcMain, shell, dialog, session, Menu, Tray, nativeI
 const path   = require('path');
 const fs     = require('fs');
 const http   = require('http');
+const https  = require('https');
 const { spawn, execFileSync } = require('child_process');
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -661,7 +662,7 @@ setInterval(()=>api.getTrayData().then(d=>{if(d)render(d);}),60000);
     } catch { return false; }
   });
   ipcMain.removeHandler('fetch-changelog'); ipcMain.handle('fetch-changelog', () => new Promise((resolve) => {
-    const req = http.get({ hostname: 'api.github.com', path: '/repos/topluci/anischedule-macOS/releases', headers: { 'User-Agent': 'AniAtlas' } },
+    const req = https.get({ hostname: 'api.github.com', path: '/repos/topluci/aniatlas-macOS/releases', headers: { 'User-Agent': 'AniAtlas' } },
       res => { let d=''; res.on('data',c=>{d+=c;}); res.on('end',()=>{ try{resolve(JSON.parse(d));}catch{resolve([]);} }); });
     req.on('error', () => resolve([]));
     req.setTimeout(8000, () => { req.destroy(); resolve([]); });
