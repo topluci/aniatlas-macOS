@@ -1,0 +1,83 @@
+{
+  "name": "aniatlas",
+  "version": "1.0.0",
+  "description": "AniAtlas – Anime tracking desktop app",
+  "author": "topluci",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist-arm64": "electron-builder --mac --arm64",
+    "dist-x64": "electron-builder --mac --x64",
+    "publish-arm64": "electron-builder --mac --arm64 --publish always",
+    "publish-x64": "electron-builder --mac --x64   --publish always"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9"
+  },
+  "build": {
+    "appId": "com.aniatlas.app",
+    "productName": "AniAtlas",
+    "publish": {
+      "provider": "github",
+      "owner": "topluci",
+      "repo": "aniatlas-macOS",
+      "private": false
+    },
+    "mac": {
+      "category": "public.app-category.entertainment",
+      "icon": "../assets/icon.icns",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "entitlements.mac.plist",
+      "entitlementsInherit": "entitlements.mac.plist",
+      "notarize": false,
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "dmg": {
+      "title": "AniAtlas ${version}",
+      "sign": false
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "frontend-build/**/*",
+      "entitlements.mac.plist"
+    ],
+    "extraResources": [
+      {
+        "from": "../backend",
+        "to": "backend",
+        "filter": [
+          "**/*",
+          "!**/__pycache__/**",
+          "!**/*.pyc",
+          "!venv/**"
+        ]
+      }
+    ],
+    "directories": {
+      "output": "../dist"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.4.0",
+    "electron-builder": "^25.1.8"
+  },
+  "overrides": {
+    "glob": "^10.4.5",
+    "tar": "^7.4.3"
+  }
+}

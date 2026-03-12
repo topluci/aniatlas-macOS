@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+desktop/node_modules/
+
+# Build outputs
+dist/
+frontend/build/
+desktop/frontend-build/
+
+# Python
+backend/__pycache__/
+backend/*.pyc
+backend-venv/
+*.egg-info/
+__pycache__/
+
+# Environment
+backend/.env
+.env
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Electron builder
+desktop/dist/
