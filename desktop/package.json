@@ -1,6 +1,6 @@
 {
   "name": "aniatlas",
-  "version": "0.6.0-alpha",
+  "version": "v0.6.1-alpha",
   "description": "AniAtlas – Anime tracking desktop app",
   "author": "topluci",
   "main": "main.js",
