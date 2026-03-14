@@ -510,6 +510,37 @@ function buildAppMenu(win) {
       { role: 'minimize' }, { role: 'zoom' },
       ...(isMac ? [{ type: 'separator' }, { role: 'front' }] : [{ role: 'close' }]),
     ]},
+    {
+      label: 'Airing',
+      submenu: [
+        {
+          label: 'Next Airing Anime',
+          accelerator: 'CmdOrCtrl+Shift+A',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.send('navigate', '/dashboard');
+              mainWindow.webContents.send('open-modal', 'airing');
+            }
+          }
+        },
+        {
+          label: 'Open Hikari AI',
+          accelerator: 'CmdOrCtrl+Shift+H',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.send('navigate', '/dashboard');
+              mainWindow.webContents.send('open-modal', 'hikari');
+            }
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Refresh Schedule',
+          accelerator: 'CmdOrCtrl+R',
+          click: () => { if (mainWindow) mainWindow.webContents.send('navigate', '/dashboard'); }
+        }
+      ]
+    },
     { label: 'Help', submenu: [
       { label: 'Check for Updates…', click: () => win.webContents.send('open-modal', 'updates') },
       { label: 'View Changelog', click: () => win.webContents.send('open-modal', 'changelog') },

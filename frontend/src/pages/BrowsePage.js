@@ -148,7 +148,7 @@ export function BrowsePage() {
 
   useEffect(() => {
     searchAnime(1);
-  }, [genre, year, season, format, status, sort]);
+  }, [genre, year, season, format, status, sort, searchAnime]);
 
   const handleSearch = (e) => {
     e.preventDefault();

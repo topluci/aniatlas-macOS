@@ -85,6 +85,11 @@ code {
     }
 }
 
+/* In macOS Electron we rely on the native window material behind the webview. */
+html.electron-mac body {
+    background: transparent !important;
+}
+
 /* Custom scrollbar for dark theme */
 .dark ::-webkit-scrollbar {
     width: 8px;
@@ -139,9 +144,21 @@ code {
 
 /* Glass effect */
 .glass {
-    background: hsl(var(--background) / 0.6);
-    backdrop-filter: blur(16px);
-    border: 1px solid hsl(var(--border) / 0.5);
+    background: hsl(var(--background) / 0.7);
+    backdrop-filter: blur(18px) saturate(1.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    border: 1px solid hsl(var(--border) / 0.55);
+    box-shadow:
+        0 1px 0 hsl(0 0% 100% / 0.06) inset,
+        0 18px 45px -28px hsl(0 0% 0% / 0.45);
+}
+
+html.electron-mac .glass {
+    background: hsl(var(--background) / 0.35);
+    border-color: hsl(var(--border) / 0.35);
+    box-shadow:
+        0 1px 0 hsl(0 0% 100% / 0.08) inset,
+        0 18px 45px -28px hsl(0 0% 0% / 0.35);
 }
 
 @layer base {
@@ -162,6 +179,9 @@ a[href*="app.emergent.sh"] {
 /* macOS window dragging */
 .navbar-drag-region {
   -webkit-app-region: drag;
+}
+.navbar-no-drag {
+  -webkit-app-region: no-drag;
 }
 .navbar-drag-region button,
 .navbar-drag-region a,

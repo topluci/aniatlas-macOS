@@ -14,6 +14,13 @@ export function ChatButton() {
     return () => clearTimeout(t);
   }, []);
 
+  // Listen for menu bar Hikari shortcut
+  useEffect(() => {
+    const handler = () => { setOpen(true); setPulse(false); };
+    window.addEventListener('open-hikari-chat', handler);
+    return () => window.removeEventListener('open-hikari-chat', handler);
+  }, []);
+
   if (!user) return null;
 
   return (
