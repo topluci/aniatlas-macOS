@@ -5,6 +5,11 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  // Environment
+  isElectron:        true,
+  platform:          process.platform,
+  isMac:             process.platform === 'darwin',
+
   // Open a URL in the system default browser (OAuth flows)
   openExternal:      (url)      => ipcRenderer.invoke('open-external', url),
   getBackendUrl:     ()         => ipcRenderer.invoke('get-backend-url'),

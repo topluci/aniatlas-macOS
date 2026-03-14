@@ -40,9 +40,16 @@ const SEASON_LABELS = {
 };
 
 export function Dashboard() {
-  const [animeList, setAnimeList] = useState([]);
-  const [schedules, setSchedules] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [animeList, setAnimeList] = useState(() => {
+    try { const c = localStorage.getItem('aniatlas_animelist'); return c ? JSON.parse(c) : []; } catch { return []; }
+  });
+  const [schedules, setSchedules] = useState(() => {
+    try { const c = localStorage.getItem('aniatlas_schedules'); return c ? JSON.parse(c) : []; } catch { return []; }
+  });
+  const [loading, setLoading] = useState(() => {
+    // Only show loading spinner if no cached data
+    try { return !localStorage.getItem('aniatlas_animelist'); } catch { return true; }
+  });
   const [activeTab, setActiveTab] = useState('schedule');
   const navigate = useNavigate();
 
@@ -60,20 +67,38 @@ export function Dashboard() {
     sort: 'title',
   });
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => {
+    const cacheTime = parseInt(localStorage.getItem('aniatlas_cache_time') || '0');
+    const cacheAge = Date.now() - cacheTime;
+    const hasCached = !!localStorage.getItem('aniatlas_animelist');
+    if (hasCached && cacheAge < 5 * 60 * 1000) {
+      // Cache fresh (<5min): show instantly, refresh silently in background
+      fetchData(true);
+    } else {
+      // No cache or stale: show loading spinner
+      fetchData(false);
+    }
+  }, []);
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const [listRes, scheduleRes] = await Promise.all([
         axios.get(`${API}/anime/list`, { withCredentials: true }),
         axios.get(`${API}/anime/schedule`, { withCredentials: true }),
       ]);
-      setAnimeList(listRes.data.entries || []);
-      setSchedules(scheduleRes.data.schedules || []);
+      const entries = listRes.data.entries || [];
+      const scheds = scheduleRes.data.schedules || [];
+      setAnimeList(entries);
+      setSchedules(scheds);
+      try {
+        localStorage.setItem('aniatlas_animelist', JSON.stringify(entries));
+        localStorage.setItem('aniatlas_schedules', JSON.stringify(scheds));
+        localStorage.setItem('aniatlas_cache_time', Date.now().toString());
+      } catch {}
     } catch (error) {
       console.error('Failed to fetch data:', error);
-      toast.error('Failed to load data', { description: 'Please refresh the page to try again.' });
+      if (!silent) toast.error('Failed to load data', { description: 'Please refresh the page to try again.' });
     } finally {
       setLoading(false);
     }

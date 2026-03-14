@@ -69,6 +69,23 @@ VAPID_CLAIMS = {"sub": "mailto:notifications@anischedule.app"}
 
 # Anime abbreviation aliases for natural language search
 ANIME_ALIASES: Dict[str, List[str]] = {
+    # Meta / intent keywords
+    "recommend": ["recommendation"],
+    "suggest": ["recommendation"],
+    "what should i watch": ["recommendation"],
+    "something to watch": ["recommendation"],
+    # Artist search intent
+    "by": ["artist"],
+    "songs by": ["artist"],
+    "music by": ["artist"],
+    "artist": ["artist"],
+    "singer": ["artist"],
+    "band": ["artist"],
+    # Character search intent
+    "character": ["character"],
+    "voiced by": ["voice actor"],
+    "va": ["voice actor"],
+    "cv": ["voice actor"],
     "aot": ["attack on titan", "shingeki no kyojin"],
     "snk": ["attack on titan", "shingeki no kyojin"],
     "mha": ["my hero academia", "boku no hero academia"],
@@ -135,7 +152,227 @@ ANIME_ALIASES: Dict[str, List[str]] = {
     "bl": ["blue lock"],
     "dandadan": ["dandadan"],
     "kaiju": ["kaiju no 8"],
-}
+    "kaiju8": ["kaiju no 8"],
+    "k8": ["kaiju no 8"],
+    "narutoo": ["naruto"],
+    "naruto": ["naruto"],
+    "boruto": ["boruto"],
+    "bleach": ["bleach"],
+    "tybw": ["bleach thousand year blood war"],
+    "fairy tail": ["fairy tail"],
+    "ft": ["fairy tail"],
+    "nana": ["nana"],
+    "clannad": ["clannad"],
+    "anohana": ["anohana", "ano hi mita hana"],
+    "your lie": ["your lie in april", "shigatsu wa kimi no uso"],
+    "shigatsu": ["your lie in april", "shigatsu wa kimi no uso"],
+    "violet evergarden": ["violet evergarden"],
+    "ve": ["violet evergarden"],
+    "re zero": ["re:zero"],
+    "rezero": ["re:zero"],
+    "rwby": ["rwby"],
+    "sao": ["sword art online"],
+    "sao alicization": ["sword art online alicization"],
+    "alicization": ["sword art online alicization"],
+    "nisekoi": ["nisekoi"],
+    "monogatari": ["monogatari series", "bakemonogatari"],
+    "bake": ["bakemonogatari"],
+    "owari": ["owarimonogatari"],
+    "kizumonogatari": ["kizumonogatari"],
+    "sailor moon": ["sailor moon", "bishoujo senshi sailor moon"],
+    "cardcaptor": ["cardcaptor sakura"],
+    "ccs": ["cardcaptor sakura"],
+    "inuyasha": ["inuyasha"],
+    "ranma": ["ranma 1/2"],
+    "fist of north star": ["fist of the north star", "hokuto no ken"],
+    "hokuto": ["fist of the north star", "hokuto no ken"],
+    "berserk": ["berserk"],
+    "vagabond": ["vagabond"],
+    "jojo": ["jojo's bizarre adventure"],
+    "jojos": ["jojo's bizarre adventure"],
+    "jjba": ["jojo's bizarre adventure"],
+    "dio": ["jojo's bizarre adventure"],
+    "gintama": ["gintama"],
+    "gin tama": ["gintama"],
+    "gintoki": ["gintama"],
+    "gto": ["great teacher onizuka"],
+    "nhk": ["welcome to the nhk"],
+    "serial experiments": ["serial experiments lain"],
+    "lain": ["serial experiments lain"],
+    "cowboy bebop": ["cowboy bebop"],
+    "cb": ["cowboy bebop"],
+    "trigun": ["trigun"],
+    "outlaw star": ["outlaw star"],
+    "samurai champloo": ["samurai champloo"],
+    "champloo": ["samurai champloo"],
+    "rurouni kenshin": ["rurouni kenshin", "samurai x"],
+    "samurai x": ["rurouni kenshin", "samurai x"],
+    "fullmetal": ["fullmetal alchemist"],
+    "fma03": ["fullmetal alchemist 2003"],
+    "promised neverland": ["the promised neverland"],
+    "neverland": ["the promised neverland"],
+    "aot final": ["attack on titan final season"],
+    "snk final": ["attack on titan final season"],
+    "86": ["86 eighty six"],
+    "eighty six": ["86 eighty six"],
+    "to your eternity": ["to your eternity", "fumetsu no anata e"],
+    "fumetsu": ["to your eternity", "fumetsu no anata e"],
+    "ranking of kings": ["ranking of kings", "ousama ranking"],
+    "ousama": ["ranking of kings", "ousama ranking"],
+    "summertime render": ["summertime rendering"],
+    "cyberpunk": ["cyberpunk edgerunners"],
+    "edgerunners": ["cyberpunk edgerunners"],
+    "chainsaw": ["chainsaw man"],
+    "denji": ["chainsaw man"],
+    "power csm": ["chainsaw man"],
+    "fire force": ["fire force", "enen no shouboutai"],
+    "enen": ["fire force"],
+    "black clover": ["black clover"],
+    "asta": ["black clover"],
+    "twin star": ["twin star exorcists"],
+    "noragami": ["noragami"],
+    "ao haru": ["ao haru ride", "blue spring ride"],
+    "blue spring": ["ao haru ride", "blue spring ride"],
+    "toradora": ["toradora"],
+    "tiger dragon": ["toradora"],
+    "chuunibyou": ["chuunibyou demo koi ga shitai", "love chunibyo"],
+    "chunibyo": ["chuunibyou demo koi ga shitai"],
+    "hyouka": ["hyouka"],
+    "k-on": ["k-on"],
+    "kon": ["k-on"],
+    "lucky star": ["lucky star"],
+    "haruhi": ["the melancholy of haruhi suzumiya", "suzumiya haruhi"],
+    "suzumiya": ["the melancholy of haruhi suzumiya"],
+    "clannad as": ["clannad after story"],
+    "after story": ["clannad after story"],
+    "anekoi": ["ane koi"],
+    "madoka": ["puella magi madoka magica", "mahou shoujo madoka magica"],
+    "pmmm": ["puella magi madoka magica"],
+    "aku no hana": ["flowers of evil", "aku no hana"],
+    "flowers of evil": ["aku no hana"],
+    "ping pong": ["ping pong the animation"],
+    "mushishi": ["mushishi"],
+    "natsume": ["natsume's book of friends", "natsume yuujinchou"],
+    "spice and wolf": ["spice and wolf", "ookami to koushinryou"],
+    "ookami": ["spice and wolf"],
+    "wolf and spice": ["spice and wolf"],
+    "kemono jihen": ["kemono jihen"],
+    "odd taxi": ["odd taxi"],
+    "deaimon": ["deaimon"],
+    "yuru camp": ["yuru camp", "laid-back camp"],
+    "laid back camp": ["laid-back camp", "yuru camp"],
+    "camping": ["yuru camp", "laid-back camp"],
+    "non non biyori": ["non non biyori"],
+    "flying witch": ["flying witch"],
+    "barakamon": ["barakamon"],
+    "silver spoon": ["silver spoon", "gin no saji"],
+    "gin no saji": ["silver spoon"],
+    "shirobako": ["shirobako"],
+    "sakura quest": ["sakura quest"],
+    "hanasaku iroha": ["hanasaku iroha"],
+    "nagi asu": ["nagi no asukara", "a lull in the sea"],
+    "glasslip": ["glasslip"],
+    "iroduku": ["iroduku the world in colors"],
+    "planetarian": ["planetarian"],
+    "angel beats": ["angel beats"],
+    "ab": ["angel beats"],
+    "little busters": ["little busters"],
+    "rewrite": ["rewrite"],
+    "kanon": ["kanon"],
+    "air": ["air"],
+    "plastic memories": ["plastic memories"],
+    "plame": ["plastic memories"],
+    "erased": ["erased", "boku dake ga inai machi"],
+    "bdim": ["erased", "boku dake ga inai machi"],
+    "boku dake": ["erased"],
+    "91 days": ["91 days"],
+    "banana fish": ["banana fish"],
+    "given": ["given"],
+    "yuri on ice": ["yuri on ice"],
+    "yoi": ["yuri on ice"],
+    "free": ["free iwatobi swim club"],
+    "iwatobi": ["free iwatobi swim club"],
+    "kuroko": ["kuroko's basketball", "kuroko no basket"],
+    "knb": ["kuroko's basketball"],
+    "haikyuu": ["haikyuu"],
+    "hq": ["haikyuu"],
+    "volleyball": ["haikyuu"],
+    "slam dunk": ["slam dunk"],
+    "captain tsubasa": ["captain tsubasa"],
+    "major": ["major"],
+    "ace of diamond": ["diamond no ace", "ace of the diamond"],
+    "daiya": ["diamond no ace"],
+    "mix": ["mix meisei story"],
+    "big windup": ["big windup", "ookiku furikabutte"],
+    "ookiku": ["big windup"],
+    "ping": ["ping pong the animation"],
+    "initial d": ["initial d"],
+    "overtake": ["overtake"],
+    "gridman": ["ssss gridman"],
+    "ssss": ["ssss gridman", "ssss dynazenon"],
+    "dynazenon": ["ssss dynazenon"],
+    "darling": ["darling in the franxx"],
+    "ditf": ["darling in the franxx"],
+    "franxx": ["darling in the franxx"],
+    "promare": ["promare"],
+    "kill la kill": ["kill la kill"],
+    "klk": ["kill la kill"],
+    "trigger": ["kill la kill", "gurren lagann"],
+    "little witch": ["little witch academia"],
+    "lwa": ["little witch academia"],
+    "carole tuesday": ["carole & tuesday"],
+    "carole": ["carole & tuesday"],
+    "sk8": ["sk8 the infinity"],
+    "sk8 the infinity": ["sk8 the infinity"],
+    "wave": ["wave listen to me"],
+    "keep your hands": ["keep your hands off eizouken"],
+    "eizouken": ["keep your hands off eizouken"],
+    "wonder egg": ["wonder egg priority"],
+    "wep": ["wonder egg priority"],
+    "vivy": ["vivy fluorite eye's song"],
+    "sonny boy": ["sonny boy"],
+    "odd": ["odd taxi"],
+    "akudama": ["akudama drive"],
+    "sk": ["sk8 the infinity"],
+    "id invaded": ["id invaded"],
+    "talentless nana": ["talentless nana"],
+    "tbhk": ["toilet bound hanako kun"],
+    "hanako": ["toilet bound hanako kun"],
+    "toilet bound": ["toilet bound hanako kun"],
+    "adachi": ["adachi and shimamura"],
+    "yashahime": ["yashahime princess half demon"],
+    "inuyashiki": ["inuyashiki"],
+    "dorohedoro": ["dorohedoro"],
+    "doro": ["dorohedoro"],
+    "golden kamuy": ["golden kamuy"],
+    "gk": ["golden kamuy"],
+    "dungeon meshi": ["dungeon meshi", "delicious in dungeon"],
+    "delicious dungeon": ["dungeon meshi", "delicious in dungeon"],
+    "laios": ["dungeon meshi"],
+    "mushoku2": ["mushoku tensei"],
+    "reincarnated slime": ["that time i got reincarnated as a slime"],
+    "rimuru": ["that time i got reincarnated as a slime"],
+    "tensura": ["that time i got reincarnated as a slime"],
+    "overlord ainz": ["overlord"],
+    "konosuba explosion": ["konosuba"],
+    "aqua konosuba": ["konosuba"],
+    "kono": ["kono subarashii sekai ni shukufuku wo", "konosuba"],
+    "tate no yuusha": ["the rising of the shield hero"],
+    "rising shield": ["the rising of the shield hero"],
+    "naofumi": ["the rising of the shield hero"],
+    "arifureta": ["arifureta from commonplace to world's strongest"],
+    "maou sama": ["the devil is a part timer", "hataraku maou sama"],
+    "devil part timer": ["the devil is a part timer"],
+    "hataraku": ["the devil is a part timer"],
+    "cautious hero": ["cautious hero the hero is overpowered but overly cautious"],
+    "seiya": ["cautious hero"],
+    "isekai quartet": ["isekai quartet"],
+    "smartphone": ["in another world with my smartphone"],
+    "isekai smartphone": ["in another world with my smartphone"],
+    "wn": ["web novel"],
+    "ln": ["light novel"],
+    "manga": ["manga"],
+};
 
 class SimpleCache:
     def __init__(self, ttl=300):
@@ -162,6 +399,46 @@ class SimpleCache:
 search_cache = SimpleCache(ttl=300)
 themes_cache = SimpleCache(ttl=600)
 animeschedule_cache = SimpleCache(ttl=1800)
+
+def detect_search_intent(query: str) -> dict:
+    """Detect if user is searching for artist, song, anime, or character."""
+    q = query.lower().strip()
+    intent = {"type": "general", "clean_query": query}
+
+    # Artist patterns
+    artist_patterns = ["by ", "songs by ", "music by ", "ost by ", "singer ", "artist ", "band "]
+    for pat in artist_patterns:
+        if q.startswith(pat):
+            intent["type"] = "artist"
+            intent["clean_query"] = query[len(pat):].strip()
+            return intent
+        if f" {pat}" in q:
+            idx = q.find(f" {pat}")
+            intent["type"] = "artist"
+            intent["clean_query"] = query[idx + len(pat) + 1:].strip()
+            return intent
+
+    # Song/OP/ED patterns
+    if any(q.startswith(p) for p in ["op ", "ed ", "opening ", "ending ", "ost ", "insert song "]):
+        intent["type"] = "song"
+        return intent
+
+    # Character patterns
+    char_patterns = ["character ", "voiced by ", "va ", "cv "]
+    for pat in char_patterns:
+        if q.startswith(pat):
+            intent["type"] = "character"
+            intent["clean_query"] = query[len(pat):].strip()
+            return intent
+
+    # Mood/recommendation patterns
+    mood_words = ["recommend", "suggest", "similar to", "like ", "mood", "something ", "what should"]
+    if any(w in q for w in mood_words):
+        intent["type"] = "recommendation"
+        return intent
+
+    return intent
+
 
 def expand_search_query(query: str) -> str:
     query_lower = query.lower().strip()

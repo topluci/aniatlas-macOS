@@ -1,5 +1,5 @@
 import { getBackendUrl } from '../lib/apiUrl';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import {
   Dialog,
@@ -83,13 +83,7 @@ export function AnimeDetailModal({ anime, open, onOpenChange }) {
   const title = anime?.title_english || anime?.title_romaji;
   const anilistUrl = `https://anilist.co/anime/${anime?.mediaId}`;
 
-  useEffect(() => {
-    if (open && anime?.mediaId) {
-      fetchDetailedInfo();
-    }
-  }, [open, anime?.mediaId]);
-
-  const fetchDetailedInfo = async () => {
+  const fetchDetailedInfo = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${API}/anime/details/${anime.mediaId}`, {
@@ -103,7 +97,13 @@ export function AnimeDetailModal({ anime, open, onOpenChange }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [anime?.mediaId]);
+
+  useEffect(() => {
+    if (open && anime?.mediaId) {
+      fetchDetailedInfo();
+    }
+  }, [open, anime?.mediaId, fetchDetailedInfo]);
 
   const data = detailedInfo || anime;
   const description = cleanDescription(data?.description);

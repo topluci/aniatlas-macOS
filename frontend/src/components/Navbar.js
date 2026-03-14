@@ -15,7 +15,7 @@ import { NotificationDropdown } from './NotificationDropdown';
 import { Calendar, Sun, Moon, Monitor, LogOut, ExternalLink, Music, ChevronDown, Tv, Settings, Menu, X, Bell } from 'lucide-react';
 
 // Detect macOS Electron for traffic light padding
-const isElectronMac = typeof window !== 'undefined' && !!window.electronAPI && navigator.platform.toLowerCase().includes('mac');
+const isElectronMac = typeof window !== 'undefined' && !!window.electronAPI?.isElectron && !!window.electronAPI?.isMac;
 
 export function Navbar({ animeList = [], schedules = [] }) {
   const { user, logout } = useAuth();
@@ -56,11 +56,14 @@ export function Navbar({ animeList = [], schedules = [] }) {
   };
 
   return (
-    <nav className="sticky top-0 z-30 border-b border-border/50 bg-background/90 backdrop-blur-xl">
-      {/* macOS traffic light spacer — pushes content below the window control buttons */}
-      {isElectronMac && <div style={{ height: 28, WebkitAppRegion: 'drag' }} />}
+    <nav className="sticky top-0 z-30 border-b border-border/50 glass relative">
+      {/* Drag region behind the whole navbar (interactive content is layered above) */}
+      {isElectronMac && <div className="navbar-drag-region absolute inset-0" aria-hidden="true" />}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+      {/* macOS traffic light spacer — pushes content below the window control buttons */}
+      {isElectronMac && <div style={{ height: 28 }} className="navbar-drag-region" aria-hidden="true" />}
+
+      <div className="navbar-no-drag max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 relative">
         {/* On macOS Electron, shift content right so it clears traffic lights */}
         <div className={`flex justify-between items-center h-13 ${isElectronMac ? 'pl-20' : ''}`}>
 
@@ -193,7 +196,7 @@ export function Navbar({ animeList = [], schedules = [] }) {
 
       {/* Mobile menu */}
       {user && mobileMenuOpen && (
-        <div className="md:hidden border-t border-border/50 py-3 space-y-1 px-4">
+        <div className="navbar-no-drag md:hidden border-t border-border/50 py-3 space-y-1 px-4">
           {[
             { path: '/dashboard', label: 'Schedule' },
             { path: '/browse', label: 'Browse Anime' },

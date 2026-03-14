@@ -1,5 +1,5 @@
 import { getBackendUrl } from '../lib/apiUrl';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import {
   Dialog,
@@ -27,7 +27,7 @@ export function ExportModal() {
   const [calSettings, setCalSettings] = useState({ syncFrequency: 'launch' });
   const [syncing, setSyncing] = useState(false);
 
-  const fetchSubscribeUrls = async () => {
+  const fetchSubscribeUrls = useCallback(async () => {
     setLoadingSubscribe(true);
     try {
       const response = await axios.get(`${API}/calendar/subscribe/token`, {
@@ -39,7 +39,7 @@ export function ExportModal() {
     } finally {
       setLoadingSubscribe(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (open && !subscribeUrls) {
@@ -48,7 +48,7 @@ export function ExportModal() {
     if (open && window.electronAPI?.calGetSettings) {
       window.electronAPI.calGetSettings().then(s => { if (s) setCalSettings(s); });
     }
-  }, [open]);
+  }, [open, subscribeUrls, fetchSubscribeUrls]);
 
   const handleOpenInAppleCalendar = async () => {
     try {

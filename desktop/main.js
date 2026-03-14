@@ -164,9 +164,18 @@ function waitForBackend(maxRetries = 60, intervalMs = 1000) {
 let mainWindow = null;
 
 function createWindow() {
+  const isMac = process.platform === 'darwin';
   mainWindow = new BrowserWindow({
     width: 1280, height: 820, minWidth: 960, minHeight: 640,
     titleBarStyle: 'hiddenInset',
+    ...(isMac
+      ? {
+          backgroundColor: '#00000000',
+          transparent: true,
+          vibrancy: 'sidebar',
+          visualEffectState: 'active',
+        }
+      : {}),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -501,12 +510,43 @@ function buildAppMenu(win) {
       { role: 'minimize' }, { role: 'zoom' },
       ...(isMac ? [{ type: 'separator' }, { role: 'front' }] : [{ role: 'close' }]),
     ]},
+    {
+      label: 'Airing',
+      submenu: [
+        {
+          label: 'Next Airing Anime',
+          accelerator: 'CmdOrCtrl+Shift+A',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.send('navigate', '/dashboard');
+              mainWindow.webContents.send('open-modal', 'airing');
+            }
+          }
+        },
+        {
+          label: 'Open Hikari AI',
+          accelerator: 'CmdOrCtrl+Shift+H',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.send('navigate', '/dashboard');
+              mainWindow.webContents.send('open-modal', 'hikari');
+            }
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Refresh Schedule',
+          accelerator: 'CmdOrCtrl+R',
+          click: () => { if (mainWindow) mainWindow.webContents.send('navigate', '/dashboard'); }
+        }
+      ]
+    },
     { label: 'Help', submenu: [
       { label: 'Check for Updates…', click: () => win.webContents.send('open-modal', 'updates') },
       { label: 'View Changelog', click: () => win.webContents.send('open-modal', 'changelog') },
       { type: 'separator' },
-      { label: 'AniAtlas on GitHub', click: () => shell.openExternal('https://github.com/topluci/anischedule-macOS') },
-      { label: 'Report an Issue',   click: () => shell.openExternal('https://github.com/topluci/anischedule-macOS/issues') },
+      { label: 'AniAtlas on GitHub', click: () => shell.openExternal('https://github.com/topluci/aniatlas-macOS') },
+      { label: 'Report an Issue',   click: () => shell.openExternal('https://github.com/topluci/aniatlas-macOS/issues') },
     ]},
   ];
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));

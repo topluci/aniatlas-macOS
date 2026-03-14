@@ -2,15 +2,15 @@ import { HashRouter as BrowserRouter, Routes, Route, Navigate, useNavigate } fro
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Toaster } from './components/ui/sonner';
-import { LandingPage } from './pages/LandingPage';
-import { Dashboard } from './pages/Dashboard';
-import { CallbackPage } from './pages/CallbackPage';
-import { MALCallbackPage } from './pages/MALCallbackPage';
-import { BrowsePage } from './pages/BrowsePage';
-import { AniSongsPage } from './pages/AniSongsPage';
-import { SettingsPage } from './pages/SettingsPage';
+import React, { useEffect, useState, useCallback, Suspense } from 'react';
+const LandingPage = React.lazy(() => import('./pages/LandingPage').then(m => ({ default: m.LandingPage })));
+const Dashboard = React.lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
+const CallbackPage = React.lazy(() => import('./pages/CallbackPage').then(m => ({ default: m.CallbackPage })));
+const MALCallbackPage = React.lazy(() => import('./pages/MALCallbackPage').then(m => ({ default: m.MALCallbackPage })));
+const BrowsePage = React.lazy(() => import('./pages/BrowsePage').then(m => ({ default: m.BrowsePage })));
+const AniSongsPage = React.lazy(() => import('./pages/AniSongsPage').then(m => ({ default: m.AniSongsPage })));
+const SettingsPage = React.lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
 import { Loader2, X, Download, Tag, Calendar, ArrowRight } from 'lucide-react';
-import React, { useEffect, useState, useCallback } from 'react';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -109,8 +109,9 @@ function UpdatesModal({ open, onClose }) {
       const stable = releases || [];
       if (!stable.length) { setStatus('uptodate'); return; }
       const latest = stable[0];
-      const current = await window.electronAPI?.getAppVersion?.() || '1.0.0';
-      if (compareVersions(latest.tag_name, current) > 0) {
+      const current = (await window.electronAPI?.getAppVersion?.() || '1.0.0').replace(/^v/, '');
+      const latestClean = latest.tag_name.replace(/^v/, '');
+      if (latestClean !== current) {
         setLatestRelease(latest);
         setStatus('available');
       } else {
@@ -193,6 +194,7 @@ function UpdatesModal({ open, onClose }) {
 
 function AppRoutes() {
   return (
+    <Suspense fallback={<div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',background:'#0a0a0f'}}><div style={{width:32,height:32,border:'3px solid #a78bfa',borderTopColor:'transparent',borderRadius:'50%',animation:'spin 0.7s linear infinite'}} /></div>}>
     <Routes>
       <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
       <Route path="/callback" element={<CallbackPage />} />
@@ -203,12 +205,89 @@ function AppRoutes() {
       <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </Suspense>
   );
+}
+
+
+// ── Airing Modal ─────────────────────────────────────────────────────────────
+function AiringModal({ open, onClose }) {
+  const [schedules, setSchedules] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    // Use cached schedule data from localStorage (populated by Dashboard)
+    try {
+      const cached = localStorage.getItem('aniatlas_schedules');
+      if (cached) { setSchedules(JSON.parse(cached)); return; }
+    } catch {}
+    setLoading(true);
+    fetch('http://127.0.0.1:18472/api/anime/schedule', { credentials: 'include' })
+      .then(r => r.json())
+      .then(d => { setSchedules(d.schedules || []); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, [open]);
+
+  const formatTime = (airingAt) => {
+    if (!airingAt) return '';
+    const diff = airingAt * 1000 - Date.now();
+    if (diff <= 0) return 'Airing Now';
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    if (days > 0) return `${days}d ${hours}h`;
+    if (hours > 0) return `${hours}h ${mins}m`;
+    return `${mins}m`;
+  };
+
+  const upcoming = schedules
+    .filter(s => s.airingAt && s.airingAt * 1000 > Date.now())
+    .sort((a, b) => a.airingAt - b.airingAt)
+    .slice(0, 10);
+
+  if (!open) return null;
+  return (
+    <div onClick={onClose} style={overlay}>
+      <div onClick={e => e.stopPropagation()} style={{...modal, width: 460}}>
+        <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:20}}>
+          <h2 style={{color:'#a78bfa', fontSize:18, fontWeight:700, margin:0}}>⏰ Next Airing</h2>
+          <button onClick={onClose} style={{background:'none', border:'none', color:'#666', cursor:'pointer', padding:4, borderRadius:6}}><X size={16}/></button>
+        </div>
+        {loading && <p style={{color:'#888', fontSize:13}}>Loading schedule…</p>}
+        {!loading && upcoming.length === 0 && <p style={{color:'#888', fontSize:13}}>No upcoming episodes found.</p>}
+        {!loading && upcoming.map((s, i) => (
+          <div key={i} style={{display:'flex', alignItems:'center', gap:12, padding:'10px 0', borderBottom:'1px solid rgba(255,255,255,0.06)'}}>
+            {s.coverImage && <img src={s.coverImage} alt="" style={{width:36, height:50, borderRadius:4, objectFit:'cover'}} loading="lazy"/>}
+            <div style={{flex:1, minWidth:0}}>
+              <div style={{color:'#e5e5e5', fontSize:13, fontWeight:600, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{s.title_english || s.title_romaji}</div>
+              <div style={{color:'#888', fontSize:11, marginTop:2}}>Ep {s.episode}</div>
+            </div>
+            <div style={{color:'#a78bfa', fontSize:12, fontWeight:700, flexShrink:0}}>{formatTime(s.airingAt)}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Hikari Menu Modal ─────────────────────────────────────────────────────────
+function HikariMenuModal({ open, onClose }) {
+  // Hooks must come before any early return
+  useEffect(() => {
+    if (open) {
+      window.dispatchEvent(new CustomEvent('open-hikari-chat'));
+      onClose();
+    }
+  }, [open, onClose]);
+  return null;
 }
 
 function App() {
   const [changelogOpen, setChangelogOpen] = useState(false);
   const [updatesOpen, setUpdatesOpen] = useState(false);
+  const [airingOpen, setAiringOpen] = useState(false);
+  const [hikariOpen, setHikariOpen] = useState(false);
 
   useEffect(() => {
     if (!window.electronAPI) return;
@@ -217,6 +296,8 @@ function App() {
     window.electronAPI.onOpenModal?.((modal) => {
       if (modal === 'changelog') setChangelogOpen(true);
       if (modal === 'updates') setUpdatesOpen(true);
+      if (modal === 'airing') setAiringOpen(true);
+      if (modal === 'hikari') setHikariOpen(true);
     });
 
     // Auto-check for updates on launch if enabled
@@ -248,6 +329,8 @@ function App() {
           <Toaster position="bottom-right" />
           <ChangelogModal open={changelogOpen} onClose={() => setChangelogOpen(false)} />
           <UpdatesModal open={updatesOpen} onClose={() => setUpdatesOpen(false)} />
+          <AiringModal open={airingOpen} onClose={() => setAiringOpen(false)} />
+          <HikariMenuModal open={hikariOpen} onClose={() => setHikariOpen(false)} />
         </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>

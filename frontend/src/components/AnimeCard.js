@@ -157,9 +157,9 @@ export function AnimeCard({ anime, showCountdown = true, onUpdate }) {
             {/* Cover Image */}
             <div className="relative aspect-[3/4] overflow-hidden">
               <img
-                src={localAnime.coverImage}
+                src={localAnime.coverImage} loading="lazy" decoding="async"
                 alt={title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />
               
@@ -241,7 +241,7 @@ export function AnimeCard({ anime, showCountdown = true, onUpdate }) {
             <img
               src={localAnime.coverImage}
               alt={title}
-              className="w-full h-full object-cover blur-sm scale-110"
+              loading="lazy" decoding="async" className="w-full h-full object-cover blur-sm scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-popover via-popover/80 to-transparent" />
             <div className="absolute bottom-3 left-3 right-3">
